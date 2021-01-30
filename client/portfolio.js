@@ -8,6 +8,7 @@ let currentPagination = {};
 // inititiqte selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
+const selectBrands = document.querySelector('#brand-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 
@@ -29,16 +30,14 @@ const setCurrentProducts = ({result, meta}) => {
  */
 const fetchProducts = async (page = 1, size = 12) => {
   try {
-    const response = await fetch(
-      `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
-    );
+    const response = await fetch(`https://clear-fashion-api.vercel.app?page=${page}&size=${size}`);
     const body = await response.json();
 
     if (body.success !== true) {
       console.error(body);
       return {currentProducts, currentPagination};
     }
-
+    
     return body.data;
   } catch (error) {
     console.error(error);
@@ -71,6 +70,38 @@ const renderProducts = products => {
   sectionProducts.appendChild(fragment);
 };
 
+//Feature 2
+const renderBrands = currentProducts => {
+  try {
+    let brands = [''];
+    let brands_html = "";
+    brands_html += `<option value="All">All</option>`
+    for(let i = 0; i<currentProducts.length; i++){      
+      if(brands.indexOf(currentProducts[i].brand) == -1){        
+        brands.push(currentProducts[i].brand);
+        brands_html += `<option value="${currentProducts[i].brand}">${currentProducts[i].brand}</option>`
+      }
+    }
+    selectBrands.innerHTML = brands_html;
+  }
+  catch (error) {
+    console.error(error);
+  }  
+}
+
+function filterBrands(currentProducts, filterBrand){
+  console.log("this is filterBrand : " + filterBrand);
+  if(filterBrand != 'all'){
+    let filteredProducts = [];
+    for(let i = 0; i < currentProducts.length; i++){
+      if(currentProducts[i].brand == filterBrand){
+        filteredProducts.push(currentProducts[i]);
+      }
+    }
+    renderProducts(filteredProducts);
+  }  
+}
+
 /**
  * Render page selector
  * @param  {Object} pagination
@@ -100,6 +131,7 @@ const render = (products, pagination) => {
   renderProducts(products);
   renderPagination(pagination);
   renderIndicators(pagination);
+  renderBrands(currentProducts);
 };
 
 /**
@@ -116,10 +148,19 @@ selectShow.addEventListener('change', event => {
     .then(() => render(currentProducts, currentPagination));
 });
 
+//Feature 1
 selectPage.addEventListener('change', event => {
   fetchProducts(parseInt(event.target.value), selectShow.value)
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination));
+});
+
+//Feature 2
+//On a déjà un 'renderBrands' qui met à jour les bonnes brands
+//Il faut maintenant faire une fonction de filtre, qui filtre les brands de mes currentsProducts en relançant un fetchProducts des produits filtrés
+selectBrands.addEventListener('change', event => {  
+  console.log(toString(event.target.value))
+    .then(filterBrands(currentProducts, toString(event.target.value)));
 });
 
 document.addEventListener('DOMContentLoaded', () =>
