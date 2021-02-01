@@ -12,6 +12,7 @@ const selectBrands = document.querySelector('#brand-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 const spanNbProductsDisplayed = document.querySelector('#nbProducts-displayed');
+const nbNewProducts = document.querySelector('#nb-New-Products');
 const sortSelect = document.querySelector('#sort-select');
 
 /**
@@ -156,6 +157,14 @@ function compare_price_desc(a,b) {
   return 0;
 }
 
+function is_new_release(product){
+  var ourDate = new Date();
+  var DateProduct = new Date(product.released);
+  //Checking if product has been release less than 21 days ago
+  if(ourDate - DateProduct < 86400 * 21000){
+    return true;
+  } else return false;
+}
 //SORT FUNCTIONS FEATURE 3-4-5-6
 function sortDateAsc(currentProducts){
   let sortedProduct = currentProducts.sort(compare_date_asc);
@@ -189,10 +198,8 @@ function sortAffordable(currentProducts){
 
 function sortNewRelease(currentProducts){
   let newReleases = [];
-  var ourDate = new Date();
   for(let i = 0; i < currentProducts.length; i++){
-    var DateProduct = new Date(currentProducts[i].released);
-    if(ourDate - DateProduct < 86400 * 15000){
+    if(is_new_release(currentProducts[i])){
       newReleases.push(currentProducts[i]);
     }
   }
@@ -218,9 +225,22 @@ const renderPagination = pagination => {
  * Render page selector
  * @param  {Object} pagination
  */
+
+ //Feature 9
+ function countNbNewProduct(){
+  let nbNewProduct = 0;
+  for (let i = 0; i < currentProducts.length; i++){
+    if (is_new_release(currentProducts[i])){
+      nbNewProduct++;
+    }
+  }
+  nbNewProducts.innerHTML = nbNewProduct;
+ }
+
 const renderIndicators = pagination => {
   const {count} = pagination;
 
+  countNbNewProduct();
   spanNbProducts.innerHTML = count;
 };
 
