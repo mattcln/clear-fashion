@@ -11,6 +11,7 @@ const selectPage = document.querySelector('#page-select');
 const selectBrands = document.querySelector('#brand-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
+const sortSelect = document.querySelector('#sort-select');
 
 /**
  * Set global value
@@ -90,8 +91,7 @@ const renderBrands = currentProducts => {
 }
 
 function filterBrands(currentProducts, filterBrand){
-  console.log("this is filterBrand : " + filterBrand);
-  if(filterBrand != 'all'){
+  if(filterBrand != 'All'){
     let filteredProducts = [];
     for(let i = 0; i < currentProducts.length; i++){
       if(currentProducts[i].brand == filterBrand){
@@ -99,7 +99,34 @@ function filterBrands(currentProducts, filterBrand){
       }
     }
     renderProducts(filteredProducts);
-  }  
+  } else {
+    renderProducts(currentProducts);
+  }
+}
+
+function sortSelection(currentProducts, sortSelected){
+  if(sortSelected == 'price-asc'){
+    
+  } else if(sortSelected == 'price-desc'){
+    
+  } else if(sortSelected == 'date-desc'){
+    
+  } else {    
+    sortDateAsc(currentProducts);
+  }
+}
+
+function compare_date(a,b) {
+  if (a.released < b.released)
+     return -1;
+  if (a.released > b.released)
+    return 1;
+  return 0;
+}
+
+function sortDateAsc(currentProducts){
+  let sortedProduct = currentProducts.sort(compare_date)
+  renderProducts(sortedProduct);
 }
 
 /**
@@ -159,6 +186,12 @@ selectPage.addEventListener('change', event => {
 //POURQUOI EVENT.TARGET.VALUE N'A PAS MARCHE !!!!!!
 selectBrands.addEventListener('change', event => {
     (filterBrands(currentProducts, selectBrands.value));
+});
+
+//Feature 3
+//POURQUOI EVENT.TARGET.VALUE N'A PAS MARCHE !!!!!!
+sortSelect.addEventListener('change', event => {
+  (sortSelection(currentProducts, sortSelect.value));
 });
 
 document.addEventListener('DOMContentLoaded', () =>
