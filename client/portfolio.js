@@ -156,11 +156,9 @@ selectPage.addEventListener('change', event => {
 });
 
 //Feature 2
-//On a déjà un 'renderBrands' qui met à jour les bonnes brands
-//Il faut maintenant faire une fonction de filtre, qui filtre les brands de mes currentsProducts en relançant un fetchProducts des produits filtrés
-selectBrands.addEventListener('change', event => {  
-  console.log(toString(event.target.value))
-    .then(filterBrands(currentProducts, toString(event.target.value)));
+//POURQUOI EVENT.TARGET.VALUE N'A PAS MARCHE !!!!!!
+selectBrands.addEventListener('change', event => {
+    (filterBrands(currentProducts, selectBrands.value));
 });
 
 document.addEventListener('DOMContentLoaded', () =>
