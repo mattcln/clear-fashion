@@ -251,7 +251,7 @@ selectPage.addEventListener('change', event => {
 
 //Feature 2
 selectBrands.addEventListener('change', event => {
-    filterBrands(currentProducts, event.target.value);
+  sortSelection(currentProducts, sortSelect.value);
 }); 
 
 //Feature 3-4-5-6
