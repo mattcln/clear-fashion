@@ -13,6 +13,7 @@ const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 const spanNbProductsDisplayed = document.querySelector('#nbProducts-displayed');
 const nbNewProducts = document.querySelector('#nb-New-Products');
+const lastReleasedDate = document.querySelector('#last-released-date');
 const sortSelect = document.querySelector('#sort-select');
 
 /**
@@ -124,7 +125,7 @@ function sortSelection(currentProducts, sortSelected){
   }
 }
 
-//COMPARE FUNCTIONS FEATURE 3-4-5-6
+//COMPARE FUNCTIONS FEATURE
 function compare_date_asc(a,b) {
   if (a.released < b.released)
      return 1;
@@ -165,7 +166,7 @@ function is_new_release(product){
     return true;
   } else return false;
 }
-//SORT FUNCTIONS FEATURE 3-4-5-6
+//SORT FUNCTIONS FEATURE
 function sortDateAsc(currentProducts){
   let sortedProduct = currentProducts.sort(compare_date_asc);
   filterBrands(sortedProduct, selectBrands.value);
@@ -206,6 +207,20 @@ function sortNewRelease(currentProducts){
   filterBrands(newReleases, selectBrands.value);
 }
 
+function getLastReleased(currentProducts){
+  let LastReleasedDate = new Date(currentProducts[0].released);
+  for(let i = 0; i < currentProducts.length; i++){
+    let ProductReleasedDate = new Date(currentProducts[i].released);
+    if(LastReleasedDate < ProductReleasedDate){
+      LastReleasedDate = ProductReleasedDate;
+    }
+  }
+  let date_formated = LastReleasedDate.getFullYear() + "-";
+  date_formated += (LastReleasedDate.getMonth()+1) + "-";
+  date_formated += LastReleasedDate.getDate();
+  return date_formated;
+}
+
 /**
  * Render page selector
  * @param  {Object} pagination
@@ -227,7 +242,7 @@ const renderPagination = pagination => {
  */
 
  //Feature 9
- function countNbNewProduct(){
+ function countNbNewProduct(currentProducts){
   let nbNewProduct = 0;
   for (let i = 0; i < currentProducts.length; i++){
     if (is_new_release(currentProducts[i])){
@@ -240,7 +255,8 @@ const renderPagination = pagination => {
 const renderIndicators = pagination => {
   const {count} = pagination;
 
-  countNbNewProduct();
+  countNbNewProduct(currentProducts);
+  lastReleasedDate.innerHTML = getLastReleased(currentProducts);
   spanNbProducts.innerHTML = count;
 };
 
