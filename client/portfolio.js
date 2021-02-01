@@ -5,7 +5,7 @@
 let currentProducts = [];
 let currentPagination = {};
 
-// inititiqte selectors
+// inititiate selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const selectBrands = document.querySelector('#brand-select');
@@ -63,6 +63,7 @@ const renderProducts = products => {
         <span>${product.brand}</span>
         <a href="${product.link}" target="_blank">${product.name}</a>
         <span>${product.price}</span>
+        <input class="favCheckbox" type="checkbox" name="fav">
       </div>
     `;
     })
