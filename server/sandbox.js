@@ -8,8 +8,9 @@ async function sandbox (eshop = 'https://www.dedicatedbrand.com/en/men/news') {
     console.log(`🕵️‍♀️  browsing ${eshop} source`);
 
     const products = await dedicatedbrand.scrape(eshop);
+    brand = 'DEDICATED';
 
-    let jsonProduct = toJson(products);
+    let jsonProduct = toJson(products, brand);
     fsLibrary.writeFile('ScrappedProducts.json', jsonProduct, (error) => { 
       
       // In case of a error throw err exception. 
@@ -26,10 +27,10 @@ const [,, eshop] = process.argv;
 
 sandbox(eshop);
 
-function toJson(products){
+function toJson(products, brand){
   let jsonproducts = "[\n";
   for(let i = 0; i < products.length; i++){
-    jsonproducts += '\t{\n\t\t"name": "' + products[i].name + '",\n\t\t"price": ' + products[i].price + '\n\t},\n';
+    jsonproducts += '\t{\n\t\t"brand" : "' + brand + '",\n\t\t"name": "' + products[i].name + '",\n\t\t"price": ' + products[i].price + '\n\t},\n';
   }
   jsonproducts = jsonproducts.substring(0, jsonproducts.length - 2);
   jsonproducts += '\n]'
