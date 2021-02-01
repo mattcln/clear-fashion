@@ -11,6 +11,7 @@ const selectPage = document.querySelector('#page-select');
 const selectBrands = document.querySelector('#brand-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
+const spanNbProductsDisplayed = document.querySelector('#nbProducts-displayed');
 const sortSelect = document.querySelector('#sort-select');
 
 /**
@@ -64,6 +65,8 @@ const renderProducts = products => {
     `;
     })
     .join('');
+  //Updating the nb products displayed
+  spanNbProductsDisplayed.innerHTML = products.length;
 
   div.innerHTML = template;
   fragment.appendChild(div);
