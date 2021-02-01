@@ -105,7 +105,11 @@ function filterBrands(currentProducts, filterBrand){
 }
 
 function sortSelection(currentProducts, sortSelected){
-  if(sortSelected == 'price-asc'){
+  if (sortSelected == 'affordable'){
+    sortAffordable(currentProducts);
+  } else if(sortSelected == 'new-release'){
+    sortNewRelease(currentProducts);
+  } else if(sortSelected == 'price-asc'){
     sortPriceAsc(currentProducts);
   } else if(sortSelected == 'price-desc'){
     sortPriceDesc(currentProducts);
@@ -168,6 +172,28 @@ function sortPriceAsc(currentProducts){
 function sortPriceDesc(currentProducts){
   let sortedProduct = currentProducts.sort(compare_price_desc);
   filterBrands(sortedProduct, selectBrands.value);
+}
+
+function sortAffordable(currentProducts){
+  let affordableProducts = [];
+  for(let i = 0; i < currentProducts.length; i++){
+    if(currentProducts[i].price < 50){
+      affordableProducts.push(currentProducts[i]);
+    }
+  }
+  filterBrands(affordableProducts, selectBrands.value);
+}
+
+function sortNewRelease(currentProducts){
+  let newReleases = [];
+  var ourDate = new Date();
+  for(let i = 0; i < currentProducts.length; i++){
+    var DateProduct = new Date(currentProducts[i].released);
+    if(ourDate - DateProduct < 86400 * 15000){
+      newReleases.push(currentProducts[i]);
+    }
+  }
+  filterBrands(newReleases, selectBrands.value);
 }
 
 /**
