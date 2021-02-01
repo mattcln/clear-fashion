@@ -106,17 +106,26 @@ function filterBrands(currentProducts, filterBrand){
 
 function sortSelection(currentProducts, sortSelected){
   if(sortSelected == 'price-asc'){
-    
+    sortPriceAsc(currentProducts);
   } else if(sortSelected == 'price-desc'){
-    
+    sortPriceDesc(currentProducts);
   } else if(sortSelected == 'date-desc'){
-    
+    sortDateDesc(currentProducts);
   } else {    
     sortDateAsc(currentProducts);
   }
 }
 
-function compare_date(a,b) {
+//COMPARE FUNCTIONS FEATURE 3-4-5-6
+function compare_date_asc(a,b) {
+  if (a.released < b.released)
+     return 1;
+  if (a.released > b.released)
+    return -1;
+  return 0;
+}
+
+function compare_date_desc(a,b) {
   if (a.released < b.released)
      return -1;
   if (a.released > b.released)
@@ -124,9 +133,41 @@ function compare_date(a,b) {
   return 0;
 }
 
+function compare_price_asc(a,b) {
+  if (a.price < b.price)
+     return -1;
+  if (a.price > b.price)
+    return 1;
+  return 0;
+}
+
+function compare_price_desc(a,b) {
+  if (a.price < b.price)
+     return 1;
+  if (a.price > b.price)
+    return -1;
+  return 0;
+}
+
+//SORT FUNCTIONS FEATURE 3-4-5-6
 function sortDateAsc(currentProducts){
-  let sortedProduct = currentProducts.sort(compare_date)
-  renderProducts(sortedProduct);
+  let sortedProduct = currentProducts.sort(compare_date_asc);
+  filterBrands(sortedProduct, selectBrands.value);
+}
+
+function sortDateDesc(currentProducts){
+  let sortedProduct = currentProducts.sort(compare_date_desc);
+  filterBrands(sortedProduct, selectBrands.value);
+}
+
+function sortPriceAsc(currentProducts){
+  let sortedProduct = currentProducts.sort(compare_price_asc);
+  filterBrands(sortedProduct, selectBrands.value);
+}
+
+function sortPriceDesc(currentProducts){
+  let sortedProduct = currentProducts.sort(compare_price_desc);
+  filterBrands(sortedProduct, selectBrands.value);
 }
 
 /**
@@ -183,15 +224,13 @@ selectPage.addEventListener('change', event => {
 });
 
 //Feature 2
-//POURQUOI EVENT.TARGET.VALUE N'A PAS MARCHE !!!!!!
 selectBrands.addEventListener('change', event => {
-    (filterBrands(currentProducts, selectBrands.value));
-});
+    filterBrands(currentProducts, event.target.value);
+}); 
 
-//Feature 3
-//POURQUOI EVENT.TARGET.VALUE N'A PAS MARCHE !!!!!!
+//Feature 3-4-5-6
 sortSelect.addEventListener('change', event => {
-  (sortSelection(currentProducts, sortSelect.value));
+  sortSelection(currentProducts, event.target.value);
 });
 
 document.addEventListener('DOMContentLoaded', () =>
