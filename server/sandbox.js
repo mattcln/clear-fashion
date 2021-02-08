@@ -92,6 +92,7 @@ async function adresseparis_scrapping(eshop, brand = 'Adresse Paris'){
     //Scrapping all menu links on home page
     const links = await adresseparis.scrape_links(eshop);
     console.log(links);
+    
 }
 
 
