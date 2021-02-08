@@ -2,15 +2,17 @@
 const fsLibrary  = require('fs') 
 const dedicatedbrand = require('./sources/dedicatedbrand');
 const mudjeans = require('./sources/mudjeans');
+const adresseparis = require('./sources/adresseparis');
 const toJsonFile = require('./sources/toJsonFile');
 const eshops = ['https://www.dedicatedbrand.com'];
 eshops.push('https://mudjeans.eu/');
-
+eshops.push('https://adresse.paris/');
 
 
 async function sandbox () {
-  await dedicated_scrapping(eshops[0]);
-  await mudjeans_scrapping(eshops[1]);
+  //await dedicated_scrapping(eshops[0]);
+  //await mudjeans_scrapping(eshops[1]);
+  await adresseparis_scrapping(eshops[2]);
 
   console.log('All scrapping done');
   process.exit(0);
@@ -78,6 +80,18 @@ async function mudjeans_scrapping(eshop, brand = 'MUDJEANS'){
     console.error(e);
     process.exit(1);
   }  
+}
+
+async function adresseparis_scrapping(eshop, brand = 'Adresse Paris'){
+  console.log(`🕵️‍♀️  browsing ${eshop} source`);
+
+    //Scrapping home page
+    console.log(eshop);
+    let products = await adresseparis.scrape_products(eshop);
+    
+    //Scrapping all menu links on home page
+    const links = await adresseparis.scrape_links(eshop);
+    console.log(links);
 }
 
 
