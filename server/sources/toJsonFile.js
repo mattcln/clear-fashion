@@ -8,8 +8,11 @@ module.exports.productToJsonFile = (products, brand, end) => {
     });
 };
 
-function ProductToJson(products, brand, end){
+function ProductToJson(products, brand, status = 'middle'){
     let jsonproducts = "";
+    if(status == 'start'){
+        jsonproducts += "[\n";
+    }
     for(let i = 0; i < products.length; i++){
         //Checking if we have a price superior to 0, replacing by null if we don't.
         if(!(products[i].price > 0)){
@@ -17,7 +20,7 @@ function ProductToJson(products, brand, end){
         }
         jsonproducts += '\t{\n\t\t"brand" : "' + brand + '",\n\t\t"name": "' + products[i].name + '",\n\t\t"price": ' + products[i].price + '\n\t},\n';
     }
-    if(end){
+    if(status == 'end'){
         jsonproducts = jsonproducts.substring(0, jsonproducts.length - 2);
         jsonproducts += '\n]'
     }

@@ -1,14 +1,19 @@
 /* eslint-disable no-console, no-process-exit */
 const fsLibrary  = require('fs') 
 const dedicatedbrand = require('./sources/dedicatedbrand');
+const mudjeans = require('./sources/mudjeans');
 const toJsonFile = require('./sources/toJsonFile');
 const eshops = ['https://www.dedicatedbrand.com'];
+eshops.push('https://mudjeans.eu/');
 
 
 
 async function sandbox () {
-  dedicated_scrapping(eshops[0]);
+  await dedicated_scrapping(eshops[0]);
+  await mudjeans_scrapping(eshops[1]);
 
+  console.log('All scrapping done');
+  process.exit(0);
 }
 
 async function dedicated_scrapping(eshop, brand = 'DEDICATED'){
@@ -26,23 +31,54 @@ async function dedicated_scrapping(eshop, brand = 'DEDICATED'){
     
 
     //Scrapping on all the links
-    let status = 'middle'
     for(let i = 0; i < links.length; i++){
       actual_link = eshop + links[i];
       console.log(actual_link);
       products = await dedicatedbrand.scrape_products(actual_link);
-      if(i == links.length - 1){
-        toJsonFile.productToJsonFile(products, brand, 'end');
-      } else toJsonFile.productToJsonFile(products, brand, status);
+      toJsonFile.productToJsonFile(products, brand);
     }
+
     console.log('Dedicated scrapping done');
-    process.exit(0);
   } catch (e) {
     console.error(e);
     process.exit(1);
   }  
 }
 
+async function mudjeans_scrapping(eshop, brand = 'MUDJEANS'){
+  try  {
+    console.log(`🕵️‍♀️  browsing ${eshop} source`);
+
+    //Scrapping home page
+    console.log(eshop);
+    let products = await mudjeans.scrape_products(eshop);
+    toJsonFile.productToJsonFile(products, brand);
+
+    //Scrapping all menu links on home page
+    let links_duplicated = await mudjeans.scrape_links(eshop);
+    let links = [];
+
+    //Removing duplicates links
+    links_duplicated.forEach((link) => {
+      if(!links.includes(link)){
+        links.push(link);
+      }
+    })
+
+    //Scrapping on all the links
+    for(let i = 0; i < links.length; i++){
+      actual_link = eshop + links[i];
+      console.log(actual_link);
+      products = await mudjeans.scrape_products(actual_link);
+      toJsonFile.productToJsonFile(products, brand);
+    }
+
+    console.log('Mudjeans scrapping done');    
+  } catch (e) {
+    console.error(e);
+    process.exit(1);
+  }  
+}
 
 
 const [,, eshop] = process.argv;
