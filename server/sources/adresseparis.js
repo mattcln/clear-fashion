@@ -63,10 +63,10 @@ module.exports.scrape_links = async url => {
 const parse_links = data => {
   const $ = cheerio.load(data);
 
-  return $('.cbp-menu-column-inner')
+  return $('.cbp-links li')
     .map((i, element) => {
       const link = $(element)
-        .find('.cbp-menu-column-inner > ul > li > a[href]')
+        .find('.a[href]')
         .attr('href')
 
       return link;
