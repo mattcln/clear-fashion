@@ -12,7 +12,7 @@ const parse = data => {
 
   return $('.productList-container .productList')
     .map((i, element) => {
-      const link = `https://www.loom.fr${$(element)
+      const link = `https://www.dedicatedbrand.com/${$(element)
         .find('.productList-link')
         .attr('href')}`;
       const brand = "Dedicated"
