@@ -14,8 +14,8 @@ const MONGODB_DB_NAME = "clearfashion"
 
 async function sandbox() {
   try {
-    dedicated_products = await dedicated_scrapping(eshops[0]);
-    //mudjeans_products = await mudjeans_scrapping(eshops[1]);
+    //dedicated_products = await dedicated_scrapping(eshops[0]);
+    mudjeans_products = await mudjeans_scrapping(eshops[1]);
     
     let allproducts = []
     //allproducts = dedicated_products.concat(mudjeans_products);
@@ -25,7 +25,7 @@ async function sandbox() {
     const client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
     const db = client.db(MONGODB_DB_NAME)
     const collection = db.collection('products');
-    const result = await collection.insertMany(dedicated_products);
+    const result = await collection.insertMany(mudjeans_products);
     console.log(result);
   
     //await adresseparis_scrapping(eshops[2]); 
