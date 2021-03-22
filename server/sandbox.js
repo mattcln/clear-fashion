@@ -15,17 +15,17 @@ const MONGODB_DB_NAME = "clearfashion"
 async function sandbox() {
   try {
     dedicated_products = await dedicated_scrapping(eshops[0]);
-    mudjeans_products = await mudjeans_scrapping(eshops[1]);
+    //mudjeans_products = await mudjeans_scrapping(eshops[1]);
     
     let allproducts = []
-    allproducts = dedicated_products.concat(mudjeans_products);
+    //allproducts = dedicated_products.concat(mudjeans_products);
     
     //console.log(allproducts);
   
     const client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
     const db = client.db(MONGODB_DB_NAME)
     const collection = db.collection('products');
-    const result = await collection.insertMany(allproducts);
+    const result = await collection.insertMany(dedicated_products);
     console.log(result);
   
     //await adresseparis_scrapping(eshops[2]); 
@@ -46,8 +46,7 @@ async function dedicated_scrapping(eshop, brand = 'DEDICATED'){
     //Scrapping home page
     console.log(eshop);
     let dedicated_products = await dedicatedbrand.scrape_products(eshop);
-    let products = [];  
-    toJsonFile.productToJsonFile(products, brand, 'start');
+    let products = [];
     
 
     //Scrapping all menu links on home page
@@ -59,7 +58,6 @@ async function dedicated_scrapping(eshop, brand = 'DEDICATED'){
       console.log(actual_link);
       products = await dedicatedbrand.scrape_products(actual_link);
       dedicated_products = dedicated_products.concat(products)
-      //toJsonFile.productToJsonFile(products, brand);
     }
 
     console.log('Dedicated scrapping done');
