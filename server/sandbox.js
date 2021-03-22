@@ -14,18 +14,18 @@ const MONGODB_DB_NAME = "clearfashion"
 
 async function sandbox() {
   try {
-    //dedicated_products = await dedicated_scrapping(eshops[0]);
-    mudjeans_products = await mudjeans_scrapping(eshops[1]);
-    
+    const dedicated_products = await dedicated_scrapping(eshops[0]);
+    const mudjeans_products = await mudjeans_scrapping(eshops[1]);
+
     let allproducts = []
-    //allproducts = dedicated_products.concat(mudjeans_products);
+    allproducts = dedicated_products.concat(mudjeans_products);
     
     //console.log(allproducts);
   
     const client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
     const db = client.db(MONGODB_DB_NAME)
     const collection = db.collection('products');
-    const result = await collection.insertMany(mudjeans_products);
+    const result = await collection.insertMany(allproducts);
     console.log(result);
   
     //await adresseparis_scrapping(eshops[2]); 
@@ -60,6 +60,8 @@ async function dedicated_scrapping(eshop, brand = 'DEDICATED'){
       dedicated_products = dedicated_products.concat(products)
     }
 
+    dedicated_products = removeDuplicateObjectFromArray(dedicated_products, 'name')
+    dedicated_products = dedicated_products.filter(item => (item.price > 0));
     console.log('Dedicated scrapping done');
     return dedicated_products;
   } catch (e) {
@@ -98,6 +100,8 @@ async function mudjeans_scrapping(eshop, brand = 'MUDJEANS'){
       //toJsonFile.productToJsonFile(products, brand);
     }
 
+    mudjeans_products = removeDuplicateObjectFromArray(mudjeans_products, 'name')
+    mudjeans_products = mudjeans_products.filter(item => (item.price > 0));
     console.log('Mudjeans scrapping done');
     return mudjeans_products;
   } catch (e) {
@@ -116,6 +120,12 @@ async function adresseparis_scrapping(eshop, brand = 'Adresse Paris'){
     console.log(products);
     
 } */
+
+//Function to remove duplicates products (https://www.tutsmake.com/javascript-remove-duplicate-objects-from-array/)
+function removeDuplicateObjectFromArray(array, key) {
+  var check = new Set();
+  return array.filter(obj => !check.has(obj[key]) && check.add(obj[key]));
+}
 
 sandbox(eshops);
 
