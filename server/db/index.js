@@ -75,6 +75,19 @@ module.exports.insert = async products => {
   }
 };
 
+module.exports.querydata = async function (query){
+  try {
+      const db = await getDB()
+      const collection = db.collection(MONGODB_COLLECTION);
+      const result = await collection.find(query).toArray();
+      return result
+    } 
+    catch(error){
+        console.error('Failed to get the query.',error);
+        return null;
+    }
+  }
+
 /**
  * Close the connection
  */

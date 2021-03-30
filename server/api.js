@@ -32,5 +32,23 @@ app.get('/products/:id',async (request, response)=>{
   }
 })
 
+app.get('/products', async (req, res) => {
+  let page = parseInt(req.query.page);
+  let size = parseInt(req.query.size);
+  let start = (size*(page-1));
+  let prod = []
+  let counter = 0;
+  const result = await db.querydata({"price":{$ne:Number("Nan")}})
+
+  for(i=start;i<start+size;i++){
+      if(result[i] != null){
+        prod.push(result[i])
+        counter++;
+      }
+    }
+  console.log(counter);
+  res.send({"success":true,"data":{"result":prod,"meta":{"currentPage":page,"pageCount":Math.round(result.length/size),"pageSize":size,"count":result.length}}});
+});
+
 app.listen(PORT);
 console.log(`📡 Running on port ${PORT}`);
