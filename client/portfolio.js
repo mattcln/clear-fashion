@@ -12,8 +12,6 @@ const selectBrands = document.querySelector('#brand-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 const spanNbProductsDisplayed = document.querySelector('#nbProducts-displayed');
-const nbNewProducts = document.querySelector('#nb-New-Products');
-const lastReleasedDate = document.querySelector('#last-released-date');
 const sortSelect = document.querySelector('#sort-select');
 
 /**
@@ -208,20 +206,6 @@ function sortNewRelease(currentProducts){
   filterBrands(newReleases, selectBrands.value);
 }
 
-function getLastReleased(currentProducts){
-  let LastReleasedDate = new Date(currentProducts[0].released);
-  for(let i = 0; i < currentProducts.length; i++){
-    let ProductReleasedDate = new Date(currentProducts[i].released);
-    if(LastReleasedDate < ProductReleasedDate){
-      LastReleasedDate = ProductReleasedDate;
-    }
-  }
-  let date_formated = LastReleasedDate.getFullYear() + "-";
-  date_formated += (LastReleasedDate.getMonth()+1) + "-";
-  date_formated += LastReleasedDate.getDate();
-  return date_formated;
-}
-
 /**
  * Render page selector
  * @param  {Object} pagination
@@ -242,22 +226,11 @@ const renderPagination = pagination => {
  * @param  {Object} pagination
  */
 
- //Feature 9
- function countNbNewProduct(currentProducts){
-  let nbNewProduct = 0;
-  for (let i = 0; i < currentProducts.length; i++){
-    if (is_new_release(currentProducts[i])){
-      nbNewProduct++;
-    }
-  }
-  nbNewProducts.innerHTML = nbNewProduct;
- }
+
 
 const renderIndicators = pagination => {
   const {count} = pagination;
 
-  countNbNewProduct(currentProducts);
-  lastReleasedDate.innerHTML = getLastReleased(currentProducts);
   spanNbProducts.innerHTML = count;
 };
 
