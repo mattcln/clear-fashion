@@ -20,8 +20,8 @@ app.get('/', (request, response) => {
 });
 
 app.get('/products/:id',async (request, response)=>{
-  _id = request.params.id;
-  res = await db.find({_id},1,1);
+  id = request.params.id;
+  res = await db.find({id},1,1);
   if(res.result.length>0){
   console.log(res.result);
   response.send(res.result);
